@@ -200,7 +200,7 @@ export default function Home() {
         <div className="hero-copy">
           <div className="eyebrow"><span /> Una nueva experiencia a partir de la ecografía 5D</div>
           <h1>La ilusión de conocer su rostro <em>antes de nacer.</em></h1>
-          <p className="lead">VEO transforma ecografías 5D en retratos recreativos del bebé mediante inteligencia artificial, convirtiendo un momento de emoción en un recuerdo único.</p>
+          <p className="lead">VEO transforma ecografías 5D en retratos hiperrealistas del bebé, convirtiendo un momento de emoción en un recuerdo único.</p>
           <div className="hero-actions">
             <a className="button primary" href="#contacto" data-analytics="hero_clinic">Solicitar demo para mi clínica <Arrow /></a>
             <a className="button secondary" href="#familias" data-analytics="hero_family">Consultar por el servicio</a>

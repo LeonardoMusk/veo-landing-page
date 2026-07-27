@@ -7,7 +7,7 @@ const resolvedUrl =
 
 export const siteConfig = {
   name: "VEO",
-  title: "VEO | Ecografías hiperrealistas a partir de ecografías 5D",
+  title: "VEO - Hiperrealismo",
   description:
     "VEO transforma ecografías 5D en imágenes hiperrealistas del bebé. Una experiencia emocional para familias y un servicio diferencial para clínicas.",
   url: resolvedUrl.replace(/\/$/, ""),
