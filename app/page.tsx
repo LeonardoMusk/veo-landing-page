@@ -3,44 +3,23 @@
 import { FormEvent, useEffect, useState } from "react";
 
 const benefitsClinic = [
-  "Aumentá el ticket promedio por paciente",
-  "Diferenciá la propuesta de tu centro",
-  "Integralo como upselling en el circuito actual",
-  "Sin inversión en nuevo equipamiento médico",
-  "Elevá la experiencia percibida por las familias",
-  "Gestioná órdenes y resultados desde un panel web",
+  "Se integra sin incorporar nuevo equipamiento médico",
+  "Complementa el servicio de ecografías 5D existente",
+  "Implementación acompañada por el equipo VEO",
+  "Una experiencia diferencial para las familias",
 ];
 
 const faqs = [
   ["¿VEO reemplaza una ecografía médica?", "No. VEO no realiza estudios médicos ni diagnósticos. Trabaja sobre una imagen 5D ya obtenida y genera una recreación visual e ilustrativa."],
-  ["¿La imagen muestra exactamente cómo será el bebé?", "No. La imagen es una interpretación recreativa generada mediante IA. Puede estar inspirada en la ecografía, pero no debe entenderse como una predicción exacta."],
   ["¿Qué tipo de imagen se necesita?", "Una ecografía 5D en formato de imagen digital. La calidad del resultado depende de la calidad de la imagen original."],
   ["¿Todas las ecografías sirven?", "No necesariamente. Algunas imágenes pueden no ser aptas por baja resolución, sombras, posición del bebé, obstrucciones o artefactos visuales."],
-  ["¿Cuánto tarda el procesamiento?", "El tiempo puede variar según la operación del centro y el flujo de revisión. El sistema está diseñado para facilitar una entrega digital ágil."],
+  ["¿Cuánto tarda el procesamiento?", "La entrega estimada es dentro de las 24 horas hábiles posteriores a la recepción de una ecografía apta. El plazo contempla el procesamiento y la revisión visual del resultado."],
   ["¿La clínica necesita equipamiento adicional?", "No. El sistema está pensado para integrarse al flujo actual, sin requerir nuevo hardware médico."],
 ];
 
 const comparisonCases = [
   { original: "/ecografia-caso-01.jpeg", processed: "/ecografia-caso-01-procesada.jpeg", label: "Caso 1" },
   { original: "/ecografia-caso-02.jpeg", processed: "/ecografia-caso-02-procesada.jpeg", label: "Caso 2" },
-];
-
-const familyVoices = [
-  {
-    quote: "Cuando vimos la imagen, sentimos que la espera se volvió un poquito más real. Fue un momento muy nuestro.",
-    signature: "Una futura mamá",
-    moment: "Esperando su primer encuentro",
-  },
-  {
-    quote: "Se la compartimos a los abuelos y fue imposible contener la emoción. Todos empezamos a imaginar su carita.",
-    signature: "Mamá y papá",
-    moment: "Compartiendo la ilusión en familia",
-  },
-  {
-    quote: "Queremos guardarla junto a sus primeras ecografías para contarle algún día cómo lo imaginábamos antes de conocerlo.",
-    signature: "Una familia en la espera",
-    moment: "Creando recuerdos desde el comienzo",
-  },
 ];
 
 function Logo({ light = false }: { light?: boolean }) {
@@ -56,11 +35,66 @@ function Arrow() {
   return <span aria-hidden="true">↗</span>;
 }
 
+function BeforeAfterSlider() {
+  const [position, setPosition] = useState(50);
+
+  return (
+    <figure className="veo-slider">
+      <div className="veo-slider-head">
+        <Logo />
+        <span>Comparación real</span>
+      </div>
+      <div className="veo-slider-stage">
+        <img
+          className="veo-slider-image"
+          src="/veo-ejemplo-01-procesada.jpeg"
+          alt="Resultado hiperrealista creado por VEO"
+        />
+        <div
+          className="veo-slider-original"
+          style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
+          aria-hidden="true"
+        >
+          <img className="veo-slider-image" src="/veo-ejemplo-01-original.jpeg" alt="" />
+        </div>
+        <span className="veo-slider-label label-original">Ecografía original</span>
+        <span className="veo-slider-label label-result">Resultado VEO</span>
+        <div className="veo-slider-divider" style={{ left: `${position}%` }} aria-hidden="true">
+          <span><b>‹</b><b>›</b></span>
+        </div>
+        <input
+          className="veo-slider-range"
+          type="range"
+          min="0"
+          max="100"
+          value={position}
+          onChange={(event) => setPosition(Number(event.target.value))}
+          aria-label="Deslizar para comparar la ecografía original con el resultado VEO"
+        />
+      </div>
+      <figcaption>
+        <span>Deslizá para comparar</span>
+        <small>El resultado depende de la calidad de la imagen original.</small>
+      </figcaption>
+    </figure>
+  );
+}
+
 function ContactForm() {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [type, setType] = useState("Clínica");
+  useEffect(() => {
+    const selectContactType = (event: Event) => {
+      const requestedType = (event as CustomEvent<string>).detail;
+      if (requestedType === "Clínica" || requestedType === "Madre o padre" || requestedType === "Otro") {
+        setType(requestedType);
+      }
+    };
+    window.addEventListener("veo:contact-type", selectContactType);
+    return () => window.removeEventListener("veo:contact-type", selectContactType);
+  }, []);
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitting(true);
@@ -130,8 +164,9 @@ export default function Home() {
   useEffect(() => {
     const stored = window.localStorage.getItem("veo-theme");
     const initialTheme = stored === "dark" ? "dark" : "light";
-    setTheme(initialTheme);
     document.documentElement.setAttribute("data-theme", initialTheme);
+    const frame = window.requestAnimationFrame(() => setTheme(initialTheme));
+    return () => window.cancelAnimationFrame(frame);
   }, []);
   const toggleTheme = () => {
     const nextTheme = theme === "light" ? "dark" : "light";
@@ -145,7 +180,7 @@ export default function Home() {
     const elements: HTMLElement[] = [];
     sections.forEach((section, sectionIndex) => {
       const items = Array.from(section.querySelectorAll<HTMLElement>(
-        ".section-label, h2, .section-head>p, .intro-grid>div, .step, .pill-row>.trait-card, .audience-visual, .audience-copy, .check-grid>span, .family-list>li, .experience-clinic, .voice-card, .platform-grid>article, .framework-card>div, .faq-list>details, .contact-copy, .form-card"
+        ".section-label, h2, .section-head>p, .intro-grid>div, .step, .pill-row>.trait-card, .audience-visual, .audience-copy, .check-grid>span, .family-list>li, .veo-slider, .experience-clinic, .platform-grid>article, .faq-list>details, .contact-copy, .form-card"
       ));
       items.forEach((element, itemIndex) => {
         element.classList.add("reveal");
@@ -186,9 +221,9 @@ export default function Home() {
       <header className="header">
         <a href="#inicio"><Logo /></a>
         <nav className={menu ? "nav open" : "nav"} aria-label="Navegación principal">
-          <a href="#como-funciona" onClick={() => setMenu(false)}>Cómo funciona</a>
-          <a href="#clinicas" onClick={() => setMenu(false)}>Para clínicas</a>
           <a href="#familias" onClick={() => setMenu(false)}>Para familias</a>
+          <a href="#clinicas" onClick={() => setMenu(false)}>Para clínicas</a>
+          <a href="#sistema" onClick={() => setMenu(false)}>El sistema</a>
           <a href="#preguntas" onClick={() => setMenu(false)}>Preguntas frecuentes</a>
           <a href="#contacto" onClick={() => setMenu(false)}>Contacto</a>
         </nav>
@@ -250,66 +285,38 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="steps-section section" id="como-funciona">
-        <div className="section-head"><div><div className="section-label">Cómo funciona</div><h2>De la ecografía a un recuerdo, <em>en cuatro pasos.</em></h2></div><p>Un flujo simple que se integra a la operación actual de tu centro.</p></div>
-        <div className="steps">
-          {[
-            ["01", "La clínica carga la ecografía 5D", "El profesional o usuario autorizado sube la imagen desde el sistema."],
-            ["02", "VEO crea la imagen hiperrealista", "El sistema interpreta la ecografía y genera distintas versiones para seleccionar el mejor resultado."],
-            ["03", "Se revisa el resultado", "El equipo selecciona la mejor variante disponible."],
-            ["04", "Se entrega a la familia", "La imagen final se descarga o envía digitalmente."],
-          ].map(([n, title, text]) => <article className="step" key={n}><span className="step-num">{n}</span><div className="step-icon">{n === "01" ? "↥" : n === "02" ? "✦" : n === "03" ? "◎" : "♡"}</div><h3>{title}</h3><p>{text}</p></article>)}
+      <section className="audience audience-family section" id="familias">
+        <div className="audience-copy">
+          <div className="section-label">Para madres y padres</div>
+          <h2>Ya elegiste verlo. Ahora podés imaginar <em>su primer retrato.</em></h2>
+          <p>Si ya tenés una ecografía 5D, podés solicitar VEO directamente. Nuestro equipo recibe la imagen, prepara y revisa el hiperrealismo, y te envía el resultado digital para guardar y compartir.</p>
+          <ul className="family-list"><li><span className="family-step">Origen</span><div><strong>Tu ecografía 5D</strong><small>trabajamos sobre una imagen que ya tengas</small></div></li><li><span className="family-step">Revisión</span><div><strong>Procesamiento acompañado</strong><small>el equipo VEO prepara y revisa el resultado</small></div></li><li><span className="family-step">Entrega</span><div><strong>Entrega digital</strong><small>dentro de 24 horas hábiles</small></div></li></ul>
+          <a className="button secondary dark" href="#contacto" data-analytics="family_cta" onClick={() => window.dispatchEvent(new CustomEvent("veo:contact-type", { detail: "Madre o padre" }))}>Quiero mi imagen VEO <Arrow /></a>
+          <p className="availability">Completá el formulario y te explicaremos cómo enviarnos tu ecografía.</p>
         </div>
-        <div className="quality-note"><span>✓</span> Cada resultado pasa por un control de calidad visual antes de ser entregado.</div>
+        <BeforeAfterSlider />
       </section>
 
       <section className="audience audience-clinic section" id="clinicas">
         <div className="audience-visual">
           <div className="dashboard">
             <div className="dash-head"><Logo /><span>Panel de órdenes</span></div>
-            <div className="dash-stats"><div><small>Órdenes activas</small><strong>24</strong><i>+12% este mes</i></div><div><small>Listas para entregar</small><strong>08</strong><i>Hoy</i></div></div>
+            <div className="dash-stats"><div><small>Órdenes activas</small><strong>24</strong><i>Seguimiento centralizado</i></div><div><small>Listas para entregar</small><strong>08</strong><i>Resultado disponible</i></div></div>
             {["Orden #1048", "Orden #1047", "Orden #1046"].map((x, i) => <div className="dash-row" key={x}><span className="tiny-avatar"/><div><strong>{x}</strong><small>Ecografía 5D · {i ? "En revisión" : "Lista"}</small></div><b className={i ? "waiting" : ""}>{i ? "En proceso" : "Completada"}</b></div>)}
           </div>
         </div>
         <div className="audience-copy">
           <div className="section-label">Para clínicas</div>
-          <h2>Un adicional premium para una experiencia que ya eligieron.</h2>
-          <p>VEO está pensado para clínicas y centros que ofrecen ecografías 5D y quieren sumar una propuesta diferencial sin complejizar su operación.</p>
+          <h2>Una nueva propuesta para tu clínica, sin cambiar cómo trabajás.</h2>
+          <p>VEO se incorpora como un servicio complementario a la ecografía 5D. Tu centro suma una experiencia de valor para las familias y nuestro equipo acompaña la implementación y cada entrega.</p>
           <div className="check-grid">{benefitsClinic.map(x => <span key={x}><b>✓</b>{x}</span>)}</div>
-          <a className="button primary" href="#contacto" data-analytics="clinic_cta">Quiero implementar VEO <Arrow /></a>
+          <a className="button primary" href="#contacto" data-analytics="clinic_cta" onClick={() => window.dispatchEvent(new CustomEvent("veo:contact-type", { detail: "Clínica" }))}>Quiero implementar VEO <Arrow /></a>
         </div>
       </section>
 
-      <section className="audience audience-family section" id="familias">
-        <div className="audience-copy">
-          <div className="section-label">Para madres y padres</div>
-          <h2>Ya elegiste verlo. Ahora podés imaginar <em>su primer retrato.</em></h2>
-          <p>VEO acompaña ese momento de emoción y espera. A partir de una ecografía 5D, genera una imagen recreativa pensada para guardar, compartir y recordar.</p>
-          <ul className="family-list"><li><span>♡</span><div><strong>Un recuerdo único</strong><small>de una etapa que pasa volando</small></div></li><li><span>⌁</span><div><strong>Sentirlo un poco más cerca</strong><small>durante la espera</small></div></li><li><span>✦</span><div><strong>Una imagen especial</strong><small>para compartir con quienes querés</small></div></li></ul>
-          <a className="button secondary dark" href="#contacto" data-analytics="family_cta">Consultar disponibilidad <Arrow /></a>
-          <p className="availability">La disponibilidad puede depender de la clínica donde se realice la ecografía.</p>
-        </div>
-        <div className="family-visual"><div className="rings"><span/><span/><span/></div><div className="quote">“Una forma nueva<br/>de imaginar todo<br/>lo que viene.”<b>VEO</b></div></div>
-        <div className="family-voices">
-          <div className="voices-header">
-            <div>
-              <span>El corazón de la experiencia</span>
-              <h3>Mensajes que reflejan lo que queremos despertar.</h3>
-            </div>
-          </div>
-          <div className="voices-grid">
-            {familyVoices.map((voice, index) => (
-              <article className={`voice-card voice-${index + 1}`} key={voice.signature}>
-                <div className="voice-mark" aria-hidden="true">“</div>
-                <blockquote>{voice.quote}</blockquote>
-                <div className="voice-signature">
-                  <span aria-hidden="true">♡</span>
-                  <div><strong>{voice.signature}</strong><small>{voice.moment}</small></div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
+      <section className="platform section" id="sistema">
+        <div className="section-head"><div><div className="section-label">El sistema VEO</div><h2>Todo el recorrido,<br/><em>en un solo lugar.</em></h2></div><p>La plataforma acompaña cada solicitud desde la carga inicial hasta la publicación y entrega del resultado.</p></div>
+        <div className="platform-grid">{[["▤","Órdenes centralizadas","Cada solicitud queda identificada y organizada."],["↥","Carga segura","La clínica incorpora la ecografía desde su propia cuenta."],["◴","Seguimiento claro","Los estados muestran en qué etapa se encuentra cada orden."],["✦","Procesamiento y revisión","VEO prepara el hiperrealismo y realiza un control humano."],["✓","Resultado disponible","La clínica puede visualizarlo y descargarlo una vez publicado."],["▥","Historial y trazabilidad","El recorrido y las acciones importantes quedan registrados."]].map(([icon,title,text])=><article key={title}><span>{icon}</span><h3>{title}</h3><p>{text}</p></article>)}</div>
       </section>
 
       <section className="experience section" id="experiencias">
@@ -334,30 +341,25 @@ export default function Home() {
         </article>
       </section>
 
-      <section className="platform section">
-        <div className="section-head"><div><div className="section-label">La plataforma</div><h2>Simple de gestionar.<br/><em>Fácil de integrar.</em></h2></div><p>Un sistema funcional para acompañar cada orden desde la carga inicial hasta la entrega final.</p></div>
-        <div className="platform-grid">{[["▤","Panel de órdenes","Todo el flujo, en un solo lugar."],["↥","Carga de ecografía","Carga simple y segura de imágenes."],["✦","Ecografía hiperrealista","Una nueva forma de imaginar su rostro, en minutos."],["◎","Revisión de variantes","Control visual antes de la entrega."],["◴","Estados de seguimiento","Visibilidad en cada etapa."],["✓","Registro de entregas","Historial claro y organizado."]].map(([icon,title,text])=><article key={title}><span>{icon}</span><h3>{title}</h3><p>{text}</p></article>)}</div>
-      </section>
-
-      <section className="framework section">
-        <div className="framework-card">
-          <div><div className="section-label light-label">Marco del servicio</div><h2>Emocional, recreativo <em>e ilustrativo.</em></h2><p className="framework-lead">VEO no realiza diagnósticos, no analiza la salud del bebé y no reemplaza la evaluación médica.</p></div>
-          <div className="framework-list">{["No constituye diagnóstico médico.", "No predice la apariencia exacta al nacer.", "No requiere realizar una ecografía adicional.", "Utiliza imágenes del circuito de la clínica.", "Requiere aceptación del carácter recreativo."].map(x=><span key={x}><b>✓</b>{x}</span>)}</div>
-        </div>
-      </section>
-
       <section className="faq section" id="preguntas">
         <div className="section-label">Preguntas frecuentes</div>
         <div className="faq-grid"><div><h2>Lo importante,<br/><em>con claridad.</em></h2><p>Todo lo que necesitás saber antes de sumar VEO o pedir el servicio.</p></div><div className="faq-list">{faqs.map(([q,a])=><details key={q}><summary>{q}<span>+</span></summary><p>{a}</p></details>)}</div></div>
       </section>
 
       <section className="contact section" id="contacto">
-        <div className="contact-copy"><div className="section-label">Contacto</div><h2>Sumá una nueva experiencia emocional a la ecografía 5D.</h2><p>Contanos si representás a una clínica o si querés saber dónde encontrar VEO. Estamos para acompañarte.</p><a className="contact-email" href="mailto:veobaby.hiperrealismo@gmail.com">veobaby.hiperrealismo@gmail.com</a><div className="contact-trust"><span>✓ Respuesta personalizada</span><span>✓ Demo para clínicas</span><span>✓ Información para familias</span></div></div>
+        <div className="contact-copy"><div className="section-label">Contacto</div><h2>Sumá una nueva experiencia emocional a la ecografía 5D.</h2><p>Contanos si representás a una clínica o si querés solicitar una imagen VEO para tu familia. Estamos para acompañarte.</p><a className="contact-email" href="mailto:veobaby.hiperrealismo@gmail.com">veobaby.hiperrealismo@gmail.com</a><div className="contact-trust"><span>✓ Respuesta personalizada</span><span>✓ Demo para clínicas</span><span>✓ Solicitudes particulares</span></div></div>
         <div className="form-card"><ContactForm /></div>
       </section>
 
       <footer>
-        <div className="footer-top"><div className="footer-brand"><Logo light/><p>La ilusión de conocer su rostro antes de nacer.</p></div><div className="footer-links"><div><strong>Explorar</strong><a href="#como-funciona">Cómo funciona</a><a href="#clinicas">Para clínicas</a><a href="#familias">Para familias</a></div><div><strong>Información</strong><a href="#preguntas">Preguntas frecuentes</a><a href="#contacto">Contacto</a><a href="/privacidad">Privacidad</a><a href="/terminos">Términos del servicio</a></div><div><strong>VEO</strong><a href="#contacto">Solicitar demo</a><a href="#contacto">Consultar disponibilidad</a><a className="footer-email" href="mailto:veobaby.hiperrealismo@gmail.com">Escribir por email</a></div></div></div>
+        <div className="footer-top">
+          <div className="footer-brand"><Logo light/><p>La ilusión de conocer su rostro antes de nacer.</p></div>
+          <div className="footer-links">
+            <div><strong>Explorar</strong><a href="#familias">Para familias</a><a href="#clinicas">Para clínicas</a><a href="#sistema">El sistema</a></div>
+            <div><strong>Información</strong><a href="#preguntas">Preguntas frecuentes</a><a href="/privacidad">Privacidad</a><a href="/terminos">Términos del servicio</a></div>
+            <div><strong>Contacto</strong><a href="#contacto">Formulario de contacto</a><a className="footer-email" href="mailto:veobaby.hiperrealismo@gmail.com">veobaby.hiperrealismo@gmail.com</a></div>
+          </div>
+        </div>
         <div className="footer-bottom"><span>© 2026 VEO. Todos los derechos reservados.</span><span>Servicio recreativo e ilustrativo. No constituye diagnóstico médico.</span></div>
       </footer>
     </main>
