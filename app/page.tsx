@@ -251,7 +251,7 @@ export default function Home() {
                 <div className="comparison-head"><Logo /><span>{item.label}</span></div>
                 <div className="comparison-image">
                   <img className={processed ? "" : "is-visible"} src={item.original} alt={`Ecografía 5D original del ${item.label.toLowerCase()}`} />
-                  <img className={`${processed ? "is-visible" : ""} ${index === 1 ? "case-two-processed" : ""}`.trim()} src={item.processed} alt={`Ecografía hiperrealista del ${item.label.toLowerCase()}`} />
+                  <img className={`${processed ? "is-visible" : ""} ${index === 0 ? "case-one-processed" : ""}`.trim()} src={item.processed} alt={`Ecografía hiperrealista del ${item.label.toLowerCase()}`} />
                   <span className={`comparison-status ${processed ? "processed" : ""}`}>{processed ? "Ecografía hiperrealista" : "Ecografía original"}</span>
                 </div>
                 <button
