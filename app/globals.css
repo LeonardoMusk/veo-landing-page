@@ -298,6 +298,7 @@ body,.hero,.intro,.steps-section,.audience,.platform,.faq,.framework,.contact,fo
 .veo-slider-head>span{font-size:.58rem;font-weight:750;letter-spacing:.15em;text-transform:uppercase}
 .veo-slider-stage{position:relative;aspect-ratio:1.6/1;border-radius:23px;background:#130f0d;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);overflow:hidden;isolation:isolate}
 .veo-slider-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 66%;user-select:none;pointer-events:none}
+.veo-slider-image-original{object-position:center 80%}
 .veo-slider-original{position:absolute;z-index:2;inset:0;will-change:clip-path}
 .veo-slider-label{position:absolute;z-index:4;bottom:14px;padding:7px 10px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:rgba(35,25,21,.7);backdrop-filter:blur(9px);color:#fff8f3;font-size:.55rem;font-weight:750;letter-spacing:.08em;text-transform:uppercase;pointer-events:none}
 .label-original{left:14px}.label-result{right:14px;background:rgba(211,118,88,.86)}

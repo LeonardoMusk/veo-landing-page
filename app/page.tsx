@@ -55,7 +55,7 @@ function BeforeAfterSlider() {
           style={{ clipPath: `inset(0 ${100 - position}% 0 0)` }}
           aria-hidden="true"
         >
-          <img className="veo-slider-image" src="/veo-ejemplo-01-original.jpeg" alt="" />
+          <img className="veo-slider-image veo-slider-image-original" src="/veo-ejemplo-01-original.jpeg" alt="" />
         </div>
         <span className="veo-slider-label label-original">Ecografía original</span>
         <span className="veo-slider-label label-result">Resultado VEO</span>
