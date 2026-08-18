@@ -359,7 +359,7 @@ export default function Home() {
           <div className="footer-links">
             <div><strong>Explorar</strong><a href="#familias">Para familias</a><a href="#clinicas">Para clínicas</a><a href="#sistema">El sistema</a></div>
             <div><strong>Información</strong><a href="#preguntas">Preguntas frecuentes</a><a href="/privacidad">Privacidad</a><a href="/terminos">Términos del servicio</a></div>
-            <div><strong>Contacto</strong><a href={whatsappUrl} target="_blank" rel="noreferrer">WhatsApp · +54 9 3534 45-2947</a><a href="#contacto">Formulario de contacto</a><a className="footer-email" href="mailto:veobaby.hiperrealismo@gmail.com">veobaby.hiperrealismo@gmail.com</a></div>
+            <div><strong>Contacto</strong><a href={whatsappUrl} target="_blank" rel="noreferrer">WhatsApp · +54 9 3534 45-2947</a><a href="https://www.instagram.com/veohiperrealismo/" target="_blank" rel="noopener noreferrer">Instagram · @veohiperrealismo</a><a href="#contacto">Formulario de contacto</a><a className="footer-email" href="mailto:veobaby.hiperrealismo@gmail.com">veobaby.hiperrealismo@gmail.com</a></div>
           </div>
         </div>
         <div className="footer-bottom"><span>© 2026 VEO. Todos los derechos reservados.</span><span>Servicio recreativo e ilustrativo. No constituye diagnóstico médico.</span></div>
