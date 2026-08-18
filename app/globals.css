@@ -265,7 +265,10 @@ body,.hero,.intro,.steps-section,.audience,.platform,.faq,.framework,.contact,fo
 .contact-form .button:disabled{cursor:wait;opacity:.72;transform:none;box-shadow:none}
 [data-theme="dark"] .form-error{border-color:rgba(244,157,135,.28);background:rgba(111,51,42,.3);color:#ffc6b7}
 .contact-email{display:inline-flex;margin-top:8px;color:#65463d;font-size:.78rem;font-weight:700;text-decoration:underline;text-decoration-color:rgba(101,70,61,.35);text-underline-offset:5px;transition:color .25s ease,text-decoration-color .25s ease}.contact-email:hover{color:#9d513d;text-decoration-color:#9d513d}.footer-email{overflow-wrap:anywhere}
+.contact-channels{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:24px}.contact-channels .contact-email{margin-top:0}.whatsapp-button{background:#543b33;color:#fff;border-color:rgba(255,255,255,.22);box-shadow:0 12px 30px rgba(84,59,51,.16)}.whatsapp-button:hover{background:#432f29;color:#fff;box-shadow:0 16px 36px rgba(84,59,51,.24)}
 [data-theme="dark"] .contact-email{color:#ffe8df;text-decoration-color:rgba(255,232,223,.4)}
+[data-theme="dark"] .whatsapp-button{background:#f0a187;color:#38251f;border-color:#f6b59f}
+@media(max-width:650px){.contact-channels{align-items:stretch;flex-direction:column}.contact-channels .button{width:100%}.contact-channels .contact-email{justify-content:center}}
 
 /* Experiencia e institución piloto */
 .experience{position:relative;padding-top:90px;padding-bottom:90px;background:linear-gradient(180deg,#fffaf7 0%,#f9ede6 100%);overflow:hidden}

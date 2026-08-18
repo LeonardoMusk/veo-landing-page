@@ -2,6 +2,8 @@
 
 import { FormEvent, useEffect, useState } from "react";
 
+const whatsappUrl = "https://wa.me/5493534452947?text=Hola%2C%20me%20interesar%C3%ADa%20saber%20m%C3%A1s%20sobre%20VEO.";
+
 const benefitsClinic = [
   "Se integra sin incorporar nuevo equipamiento médico",
   "Complementa el servicio de ecografías 5D existente",
@@ -227,7 +229,7 @@ export default function Home() {
           <a href="#preguntas" onClick={() => setMenu(false)}>Preguntas frecuentes</a>
           <a href="#contacto" onClick={() => setMenu(false)}>Contacto</a>
         </nav>
-        <div className="header-actions"><button className="theme-toggle" type="button" onClick={toggleTheme} aria-label={theme === "light" ? "Activar modo noche" : "Activar modo día"} title={theme === "light" ? "Modo noche" : "Modo día"}><span aria-hidden="true">{theme === "light" ? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> : <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>}</span></button><a className="button small primary" href="#contacto" data-analytics="header_demo">Solicitar demo</a></div>
+        <div className="header-actions"><button className="theme-toggle" type="button" onClick={toggleTheme} aria-label={theme === "light" ? "Activar modo noche" : "Activar modo día"} title={theme === "light" ? "Modo noche" : "Modo día"}><span aria-hidden="true">{theme === "light" ? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> : <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>}</span></button><a className="button small primary" href="#contacto" data-analytics="header_contact">Contactanos</a></div>
         <button className="menu" onClick={() => setMenu(!menu)} aria-label="Abrir menú" aria-expanded={menu}><span/><span/></button>
       </header>
 
@@ -347,7 +349,7 @@ export default function Home() {
       </section>
 
       <section className="contact section" id="contacto">
-        <div className="contact-copy"><div className="section-label">Contacto</div><h2>Sumá una nueva experiencia emocional a la ecografía 5D.</h2><p>Contanos si representás a una clínica o si querés solicitar una imagen VEO para tu familia. Estamos para acompañarte.</p><a className="contact-email" href="mailto:veobaby.hiperrealismo@gmail.com">veobaby.hiperrealismo@gmail.com</a><div className="contact-trust"><span>✓ Respuesta personalizada</span><span>✓ Demo para clínicas</span><span>✓ Solicitudes particulares</span></div></div>
+        <div className="contact-copy"><div className="section-label">Contacto</div><h2>Sumá una nueva experiencia emocional a la ecografía 5D.</h2><p>Contanos si representás a una clínica o si querés solicitar una imagen VEO para tu familia. Estamos para acompañarte.</p><div className="contact-channels"><a className="button whatsapp-button" href={whatsappUrl} target="_blank" rel="noreferrer" data-analytics="contact_whatsapp">Hablar por WhatsApp <Arrow /></a><a className="contact-email" href="mailto:veobaby.hiperrealismo@gmail.com">veobaby.hiperrealismo@gmail.com</a></div><div className="contact-trust"><span>✓ Respuesta personalizada</span><span>✓ Demo para clínicas</span><span>✓ Solicitudes particulares</span></div></div>
         <div className="form-card"><ContactForm /></div>
       </section>
 
@@ -357,7 +359,7 @@ export default function Home() {
           <div className="footer-links">
             <div><strong>Explorar</strong><a href="#familias">Para familias</a><a href="#clinicas">Para clínicas</a><a href="#sistema">El sistema</a></div>
             <div><strong>Información</strong><a href="#preguntas">Preguntas frecuentes</a><a href="/privacidad">Privacidad</a><a href="/terminos">Términos del servicio</a></div>
-            <div><strong>Contacto</strong><a href="#contacto">Formulario de contacto</a><a className="footer-email" href="mailto:veobaby.hiperrealismo@gmail.com">veobaby.hiperrealismo@gmail.com</a></div>
+            <div><strong>Contacto</strong><a href={whatsappUrl} target="_blank" rel="noreferrer">WhatsApp · +54 9 3534 45-2947</a><a href="#contacto">Formulario de contacto</a><a className="footer-email" href="mailto:veobaby.hiperrealismo@gmail.com">veobaby.hiperrealismo@gmail.com</a></div>
           </div>
         </div>
         <div className="footer-bottom"><span>© 2026 VEO. Todos los derechos reservados.</span><span>Servicio recreativo e ilustrativo. No constituye diagnóstico médico.</span></div>
